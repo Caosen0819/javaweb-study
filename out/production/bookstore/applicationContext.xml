@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE beans [
+    <!ELEMENT beans (bean*)>
+    <!ELEMENT bean (property*)>
+    <!ELEMENT property (#PCDATA)>
+
+    <!ATTLIST bean id ID #REQUIRED>
+    <!ATTLIST bean class CDATA #IMPLIED>
+    <!ATTLIST property name CDATA #IMPLIED>
+    <!ATTLIST property ref IDREF #IMPLIED>
+]>
+
+<beans>
+    <bean id="page" class="com.caosen.myssm.myspringmvc.PageController"/>
+
+    <!-- DAO-->
+    <bean id="userDAO" class="com.caosen.book.dao.impl.UserDAOImpl"/>
+    <bean id="bookDAO" class="com.caosen.book.dao.impl.BookDAOImpl"/>
+    <bean id="cartItemDAO" class="com.caosen.book.dao.impl.CartItemDAOImpl"/>
+    <bean id="orderDAO" class="com.caosen.book.dao.impl.OrderDAOImpl"/>
+    <bean id="orderItemDAO" class="com.caosen.book.dao.impl.OrderItemDAOImpl"/>
+
+
+    <!-- service-->
+    <bean id="userService" class="com.caosen.book.service.Impl.UserServiceImpl">
+        <property name="userDAO" ref="userDAO"/>
+    </bean>
+    <bean id="bookService" class="com.caosen.book.service.Impl.BookServiceImpl">
+        <property name="bookDAO" ref="bookDAO"/>
+    </bean>
+    <bean id="cartItemService" class="com.caosen.book.service.Impl.CartItemServiceImpl">
+        <property name="cartItemDAO" ref="cartItemDAO"/>
+        <property name="bookService" ref="bookService"/>
+    </bean>
+    <bean id="orderService" class="com.caosen.book.service.Impl.OrderServiceImpl">
+        <property name="orderDAO" ref="orderDAO"/>
+        <property name="orderItemDAO" ref="orderItemDAO"/>
+        <property name="cartItemDAO" ref="cartItemDAO"/>
+    </bean>
+
+
+    <!-- controller-->
+    
+    <bean id="user" class="com.caosen.book.Controller.UserController">
+        <property name="userService" ref="userService"/>
+        <property name="cartItemService" ref="cartItemService"/>
+
+    </bean>
+    <bean id="book" class="com.caosen.book.Controller.BookController">
+        <property name="bookService" ref="bookService"/>
+    </bean>
+    <bean id="cart" class="com.caosen.book.Controller.CartController">
+        <property name="cartItemService" ref="cartItemService"/>
+    </bean>
+    <bean id="order" class="com.caosen.book.Controller.OrderController">
+        <property name="orderService" ref="orderService"/>
+    </bean>
+</beans>
